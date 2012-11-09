@@ -3,72 +3,72 @@ require 'open-uri'
 
 
 class Action
-  attr_reader :action, :parameter, :result
+  attr_reader :action, :first_param, :result
   
-  def initialize(action, parameter, result)
+  def initialize(action, first_param, second_param)
     @action = action
-    @parameter = parameter
-    @result = result
+    @first_param = first_param
+    @second_param = second_param
   end
   
   def generate
-      send("#{@action}", @parameter, @result  )
+      send("#{@action}")
   end
   
-  def store parameter, result
-    "int #{result} = #{parameter};"
+  def store 
+    "int #{@second_param} = #{@first_param};"
   end 
   
-  def open parameter, result
-    "int #{result} = #{parameter};"
+  def open
+    "page.open(\"#{@first_param}\");"
   end
   
-  def type parameter, result
+  def type
+    "page.type(id(\"#{@first_param}\"), \"#{@second_param}\")"
+  end
+
+
+    def clickAndWait
+      "page.click(id(\"#{@first_param}\"))"
+    end
+
+
+    def verifyTitle
+      "assertThat(page.getTitle(), is(\"#{@first_param}\"))"
+    end
+
+
+    def verifyText
+      
+    end
+
+
+    def verifyElementNotPresent
 
     end
 
 
-    def clickAndWait parameter, result
+    def verifyTextNotPresent
 
     end
 
 
-    def verifyTitle parameter, result
+    def click
 
     end
 
 
-    def verifyText parameter, result
+    def selectWindowWithWait
 
     end
 
 
-    def verifyElementNotPresent parameter, result
+    def waitForCondition
 
     end
 
 
-    def verifyTextNotPresent parameter, result
-
-    end
-
-
-    def click parameter, result
-
-    end
-
-
-    def selectWindowWithWait parameter, result
-
-    end
-
-
-    def waitForCondition parameter, result
-
-    end
-
-
-    def close parameter, result
+    def close
 
     end
 end
@@ -84,7 +84,7 @@ def parse(html)
       action = Action.new(tds[0].text, tds[2].text, tds[4].text)
       result << action
       # puts "Action: #{tds[0].text}"
-      #       puts "Parameter: #{tds[2].text}"
+      #       puts "first_param: #{tds[2].text}"
       #       puts "Result: #{tds[4].text}" 
       #       puts "=========================="
   end
@@ -96,7 +96,7 @@ actions.each do |action|
   puts action.generate
 # actions.collect(&:action).uniq.each do |action|
   # puts """
-  # def #{action} parameter, result
+  # def #{action}
   # 
   # end
   # """
