@@ -16,7 +16,7 @@ class SeleniumToJavaConverter
 
 
   def convert
-    abc = "" "
+    javaCode = "" "
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright (c) 2011, Suncorp Metway Limited. All rights reserved.
@@ -57,7 +57,7 @@ public  class #{@class_name} extends PageTestCase {
 }
       " ""
 
-  File.open("#{@@output_dir+@class_name}.java", 'w') { |f| f.write(abc) }
+  File.open("#{@@output_dir+@class_name}.java", 'w') { |f| f.write(javaCode) }
   end
 
 end
