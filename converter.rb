@@ -24,23 +24,31 @@ class Action
   end
   
   def type
-    "page.type(id(\"#{@first_param}\"), \"#{@second_param}\")"
+    "page.type(id(\"#{@first_param}\"), \"#{@second_param}\");"
   end
 
 
-    def clickAndWait
-      "page.click(id(\"#{@first_param}\"))"
+  def clickAndWait
+    "page.click(id(\"#{@first_param}\"));"
+  end
+
+  def verifyTitle
+    "assertThat(page.getTitle(), is(\"#{@first_param}\"));"
+  end
+
+  def verifyText
+    if @first_param.match(/.*'applicationErrors'.*\[(\d*?)\].*/)
+      error_index = @first_param.scan(/.*'applicationErrors'.*\[(\d*?)\].*/)[0][0]
+      return "assertThat(page.getError(#{error_index}), is(\"#{@second_param}\"));"      
     end
-
-
-    def verifyTitle
-      "assertThat(page.getTitle(), is(\"#{@first_param}\"))"
+    if @first_param.match(/document.getElementById\(\'(.*)\'\).cells\[\$\{(.*)\}\]/)
+      matches = @first_param.scan(/document.getElementById\(\'(.*)\'\).cells\[\$\{(.*)\}\]/)[0]
+      return "assertThat(page.getCellText(id(\"#{matches[0]}\"), #{matches[1]}), is(\"#{@second_param}\"));"      
     end
-
-
-    def verifyText
-      
-    end
+    
+     
+      "assertThat(page.getText(\"#{@first_param}\")), is(\"#{@second_param}\")"
+  end
 
 
     def verifyElementNotPresent
@@ -90,7 +98,7 @@ def parse(html)
   end
   result
 end
-
+# 
 actions = parse('a.html')
 actions.each do |action|
   puts action.generate
@@ -102,11 +110,5 @@ actions.each do |action|
   # """
   # 
 end
-
-
-def store( key, value)
-  
-end  
-
 
 
