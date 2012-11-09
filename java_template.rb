@@ -27,24 +27,37 @@ class JavaTemplate
 //
 ////////////////////////////////////////////////////////////////////////////////
 package au.com.suncorp.crmservices.html;
+import au.com.suncorp.crmservices.webdriver.PageTestCase;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.openqa.selenium.By;
 
-    public  class #{@class_name} extends PageTestCase {
+import static java.net.URLEncoder.encode;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.openqa.selenium.By.id;
+import static org.openqa.selenium.By.name;
+import static org.openqa.selenium.By.xpath;
 
-private EditContactDetailsPage page;
-                 protected void onSetUpInBrowser() {
+public  class #{@class_name} extends PageTestCase {
+
+    private EditContactDetailsPage page;
+
+    protected void onSetUpInBrowser() {
         page = new EditContactDetailsPage(browser);
     }
 
-        @Test
-        public void test#{@class_name}(){
-
-        #{
-    @parser.method_body
-    } }
-      }
+    @Test
+    public void test#{@class_name}(){
+        #{@parser.method_body}
+    }
+}
       " ""
 
-    File.open("#{@@output_dir+@class_name}.java", 'w') { |f| f.write(abc) }
+  File.open("#{@@output_dir+@class_name}.java", 'w') { |f| f.write(abc) }
   end
 
 end
