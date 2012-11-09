@@ -15,7 +15,7 @@ class SeleniumToJavaConverter
   end
 
 
-  def generate
+  def convert
     abc = "" "
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -66,5 +66,5 @@ FileUtils.rmtree 'au'
 FileUtils.makedirs 'au/com/suncorp/crmservices/html/'
 
 Find.find('html') do |f|
-  (SeleniumToJavaConverter.new f).generate if f.match(/\.html\Z/)
+  (SeleniumToJavaConverter.new f).convert if f.match(/\.html\Z/)
 end
