@@ -42,7 +42,7 @@ class Action
     end
 
 
-    "assertThat(page.getText(\"#{@first_param}\")), is(\"#{@second_param}\")"
+    "assertThat(page.getText(\"#{@first_param}\")), is(\"#{@second_param}\"));"
   end
 
 
@@ -59,17 +59,20 @@ class Action
 
 
   def click
-    "page.click(id(\"#{@first_param}\"))"
+    if is_link?
+      return "page.click(linkText(\"#{link_text}\"));"
+    end
+    "page.click(id(\"#{@first_param}\"));"
   end
 
 
   def selectWindowWithWait
-
+    "page.selectPopUpWindow(\"#{@first_param}\");"
   end
 
 
   def waitForCondition
-
+    "//TODO waitForCondition(#{tr_element_id})"
   end
 
 
@@ -78,8 +81,16 @@ class Action
   end
 
   private
-  def is_link?
+  def tr_element_id
+    @first_param.scan(/findElementAttempt\(.*tr\[@id='(.*)'.*/)[0][0]
+  end
 
+  def is_link?
+    @first_param.match(/.*link=.*/)
+  end
+
+  def link_text
+    @first_param.scan(/.*link=(.*)/)[0][0]
   end
 
   def application_error_index
