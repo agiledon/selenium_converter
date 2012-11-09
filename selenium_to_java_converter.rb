@@ -57,7 +57,7 @@ public  class #{@class_name} extends PageTestCase {
 }
       " ""
 
-  File.open("#{@@output_dir+@class_name}.java", 'w') { |f| f.write(javaCode) }
+    File.open("#{@@output_dir+@class_name}.java", 'w') { |f| f.write(javaCode) }
   end
 
 end
