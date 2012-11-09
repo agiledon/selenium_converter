@@ -38,11 +38,11 @@ class Action
     end
     if @first_param.match(/document.getElementById\(\'(.*)\'\).cells\[\$\{(.*)\}\]/)
       matches = @first_param.scan(/document.getElementById\(\'(.*)\'\).cells\[\$\{(.*)\}\]/)[0]
-      return "assertThat(page.getCellText(id(\"#{matches[0]}\"), #{matches[1]}), is(\"#{@second_param}\"));"
+      return "assertThat(page.getCellText(\"#{matches[0]}\", #{matches[1]}), is(\"#{@second_param}\"));"
     end
 
 
-    "assertThat(page.getText(\"#{@first_param}\")), is(\"#{@second_param}\"));"
+    "assertThat(page.getText(\"#{@first_param}\"), is(\"#{@second_param}\"));"
   end
 
 
@@ -54,7 +54,7 @@ class Action
 
 
   def verifyTextNotPresent
-    "assertThat(page.isTextPresent(\"#{@first_param}\"));"
+    "assertFalse(page.isTextPresent(\"#{@first_param}\"));"
   end
 
 
