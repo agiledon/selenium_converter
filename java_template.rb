@@ -1,13 +1,13 @@
 require 'FileUtils'
 require 'find'
+require './method_body_generator'
 class JavaTemplate
   attr_accessor :parser, :class_name
   @@output_dir = 'au/com/suncorp/crmservices/html/'
 
-
   def initialize(fileName)
     @class_name = createClassName fileName
-    #@parser = Parser.new fileName
+    @parser = MethodBodyGenerator.new fileName
   end
 
   def createClassName fileName
@@ -27,13 +27,20 @@ class JavaTemplate
 //
 ////////////////////////////////////////////////////////////////////////////////
 package au.com.suncorp.crmservices.html;
-      class #{@class_name} extends PageTestCase {
+
+    public  class #{@class_name} extends PageTestCase {
+
+private EditContactDetailsPage page;
+                 protected void onSetUpInBrowser() {
+        page = new EditContactDetailsPage(browser);
+    }
+
         @Test
-        publict void test#{@class_name}(){
+        public void test#{@class_name}(){
 
         #{
-        #@parser.method_body
-        } }
+    @parser.method_body
+    } }
       }
       " ""
 
@@ -46,8 +53,5 @@ FileUtils.rmtree 'au'
 FileUtils.makedirs 'au/com/suncorp/crmservices/html/'
 
 Find.find('html') do |f|
-  if f.match(/\.html\Z/)
-    template = JavaTemplate.new f
-    template.generate
-  end
+  (JavaTemplate.new f).generate if f.match(/\.html\Z/)
 end
