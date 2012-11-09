@@ -33,12 +33,17 @@ class Action
   end
 
   def verifyText
-    if is_application_error_element?
+    if application_error_element?
       return "assertThat(page.getError(#{application_error_index}), is(\"#{@second_param}\"));"
     end
-    if @first_param.match(/document.getElementById\(\'(.*)\'\).cells\[\$\{(.*)\}\]/)
+    if table_cell_text?
       matches = @first_param.scan(/document.getElementById\(\'(.*)\'\).cells\[\$\{(.*)\}\]/)[0]
       return "assertThat(page.getCellText(\"#{matches[0]}\", #{matches[1]}), is(\"#{@second_param}\"));"
+    end
+
+    #assertTrue(page.getText("errorMessage").matches("^The following error\\(s\\) occurred:[\\s\\S]*$"));
+    if regexp?
+      return "assertTrue(page.getText(\"#{@first_param}\").matches(\"^#{@second_param}$\"));"
     end
 
 
@@ -46,8 +51,13 @@ class Action
   end
 
 
+  def table_cell_text?
+    @first_param.match(/document.getElementById\(\'(.*)\'\).cells\[\$\{(.*)\}\]/)
+  end
+
+
   def verifyElementNotPresent
-    if is_application_error_element?
+    if application_error_element?
       return "assertFalse(page.hasError(#{application_error_index}));"
     end
   end
@@ -80,7 +90,20 @@ class Action
 
   end
 
+  def verifyAttribute
+    return "assertThat(page.isElementPresent(#{@first_param}));"
+  end
+
+  def verifyElementPresent
+    return "assertTrue(page.isElementPresent(#{@first_param}));"
+  end
+
   private
+
+  def regexp?
+    @first_param.match(/.*\*$/)[0][0]
+  end
+
   def tr_element_id
     @first_param.scan(/findElementAttempt\(.*tr\[@id='(.*)'.*/)[0][0]
   end
@@ -97,7 +120,7 @@ class Action
     @first_param.scan(/.*'applicationErrors'.*\[(\d*?)\].*/)[0][0]
   end
 
-  def is_application_error_element?
+  def application_error_element?
     @first_param.match(/.*'applicationErrors'.*\[(\d*?)\].*/)
   end
 
