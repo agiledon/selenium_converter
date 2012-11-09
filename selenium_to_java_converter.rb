@@ -1,7 +1,7 @@
 require 'FileUtils'
 require 'find'
 require './method_body_generator'
-class JavaTemplate
+class SeleniumToJavaConverter
   attr_accessor :parser, :class_name
   @@output_dir = 'au/com/suncorp/crmservices/html/'
 
@@ -66,5 +66,5 @@ FileUtils.rmtree 'au'
 FileUtils.makedirs 'au/com/suncorp/crmservices/html/'
 
 Find.find('html') do |f|
-  (JavaTemplate.new f).generate if f.match(/\.html\Z/)
+  (SeleniumToJavaConverter.new f).generate if f.match(/\.html\Z/)
 end
