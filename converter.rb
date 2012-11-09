@@ -1,6 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
-
+require 'java_template'
 
 class Action
   attr_reader :action, :first_param, :result
@@ -87,7 +87,7 @@ def parse(html)
   doc.xpath('//table/tbody/tr').each do |tr|
       tds = tr.children
       if tds.length == 2 then
-        next;
+        next
       end
       action = Action.new(tds[0].text, tds[2].text, tds[4].text)
       result << action
@@ -100,8 +100,10 @@ def parse(html)
 end
 # 
 actions = parse('a.html')
+java_template = JavaTemplate.new
+java_template.generate
 actions.each do |action|
-  puts action.generate
+  java_template.add action.generate
 # actions.collect(&:action).uniq.each do |action|
   # puts """
   # def #{action}
