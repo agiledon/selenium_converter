@@ -101,7 +101,7 @@ class Action
   private
 
   def regexp?
-    @first_param.match(/.*\*$/)[0][0]
+    @second_param.match /.*\*$/
   end
 
   def tr_element_id
