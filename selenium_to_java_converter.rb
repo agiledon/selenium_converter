@@ -6,6 +6,7 @@ class SeleniumToJavaConverter
   @@output_dir = 'au/com/suncorp/crmservices/html/'
 
   def initialize(fileName)
+    puts "Converting #{fileName}"
     @class_name = createClassName fileName
     @parser = MethodBodyGenerator.new fileName
   end
