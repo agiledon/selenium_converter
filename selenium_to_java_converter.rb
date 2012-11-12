@@ -18,30 +18,6 @@ class SeleniumToJavaConverter
 
   def convert
     javaCode = "" "
-////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2011, Suncorp Metway Limited. All rights reserved.
-//
-// This is unpublished proprietary source code of Suncorp Metway Limited.
-// The copyright notice above does not evidence any actual or intended
-// publication of such source code.
-//
-////////////////////////////////////////////////////////////////////////////////
-package au.com.suncorp.crmservices.html;
-import au.com.suncorp.crmservices.webdriver.PageTestCase;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.openqa.selenium.By;
-
-import static java.net.URLEncoder.encode;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.openqa.selenium.By.id;
-import static org.openqa.selenium.By.name;
-import static org.openqa.selenium.By.xpath;
 
 public  class #{@class_name} extends PageTestCase {
 
@@ -58,7 +34,8 @@ public  class #{@class_name} extends PageTestCase {
 }
       " ""
 
-    File.open("#{@@output_dir+@class_name}.java", 'w') { |f| f.write(javaCode) }
+    java_class_header = IO.read("java_class_header.txt")
+    File.open("#{@@output_dir+@class_name}.java", 'w') { |f| f.write(java_class_header + javaCode) }
   end
 
 end

@@ -23,7 +23,6 @@ class Action
     "page.type(id(\"#{@first_param}\"), \"#{@second_param}\");"
   end
 
-
   def clickAndWait
     "page.click(id(\"#{@first_param}\"));"
   end
